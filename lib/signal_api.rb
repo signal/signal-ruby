@@ -1,6 +1,5 @@
 require "httparty"
 
-require "signal_api/version"
 require "signal_api/exceptions"
 require "signal_api/signal_http_api"
 
