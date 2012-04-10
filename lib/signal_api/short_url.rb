@@ -19,7 +19,8 @@ module SignalApi
 
       response = post('/api/short_urls.xml',
                       :body => body,
-                      :headers => {'api_token' => SignalApi.api_key, 'Content-Type' => 'application/xml'})
+                      :format => :xml,
+                      :headers => {'api_token' => SignalApi.api_key})
 
       if response.code == 201
         data = response.parsed_response['short_url']
