@@ -4,5 +4,6 @@ module SignalApi
 
     include HTTParty
     base_uri BASE_URI
+    default_timeout 5
   end
 end
