@@ -4,8 +4,8 @@ require File.expand_path('../lib/signal_api/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["John Wood"]
   gem.email         = ["john@signalhq.com"]
-  gem.description   = %q{TODO: Ruby implementation of the Signal API}
-  gem.summary       = %q{TODO: Ruby implementation of the Signal API}
+  gem.description   = %q{Ruby implementation of the Signal API}
+  gem.summary       = %q{Ruby implementation of the Signal API}
   gem.homepage      = "http://dev.signalhq.com"
 
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
