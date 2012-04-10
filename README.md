@@ -1,4 +1,4 @@
-# Signal
+# SignalApi
 
 Ruby implementation of the Signal API. API details can be found at [http://dev.signalhq.com](http://dev.signalhq.com)
 
@@ -6,7 +6,7 @@ Ruby implementation of the Signal API. API details can be found at [http://dev.s
 
 Add this line to your application's Gemfile:
 
-    gem 'signal'
+    gem 'signal_api'
 
 And then execute:
 
@@ -14,7 +14,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install signal
+    $ gem install signal_api
 
 ## Usage
 
