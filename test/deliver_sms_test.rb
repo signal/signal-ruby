@@ -18,6 +18,14 @@ class DeliverSmsTest < Test::Unit::TestCase
     assert_equal "7f9e82c0efbc012a166c0030482ef624", message_id
   end
 
+  should "handle API failures" do
+    FakeWeb.register_uri(:post, uri, :status => ['500', 'Server Error'], :body => "Something bad happened")
+    deliver_sms = SignalApi::DeliverSms.new('joe', 'joepassword')
+    assert_raise SignalApi::ApiException do
+      message_id = deliver_sms.deliver('3125551212', 'This is a test message')
+    end
+  end
+
   should "raise an error if the message is blank" do
     deliver_sms = SignalApi::DeliverSms.new('joe', 'joepassword')
     exception = assert_raise SignalApi::InvalidParameterException do

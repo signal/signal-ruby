@@ -43,7 +43,7 @@ module SignalApi
         response.parsed_response =~ /^Message ID: (.*)$/
         $1 
       else
-        handle_api_failure(response)
+        self.class.handle_api_failure(response)
       end
     end
   end
