@@ -12,7 +12,7 @@ module SignalApi
       if response.code == 401
         raise AuthFailedException.new("Authentication to the Signal platform failed.  Make sure your API key is correct.")
       else
-        message = "Unable to create short url.  Respone body: #{response.body}"
+        message = "API request failed with a response code of #{response.code}.  Respone body: #{response.body}"
         SignalApi.logger.error message
         raise ApiException.new(message)
       end
