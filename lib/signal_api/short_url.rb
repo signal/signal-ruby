@@ -17,6 +17,7 @@ module SignalApi
 </short_url>
       END
 
+      SignalApi.logger.info "Attempting to create a short URL for #{target}"
       response = post('/api/short_urls.xml',
                       :body => body,
                       :format => :xml,
@@ -26,7 +27,9 @@ module SignalApi
         data = response.parsed_response['short_url']
         new(data['id'], data['target_url'], "http://#{domain}/#{data['slug']}", domain)
       else
-        raise ApiException.new("Unable to create short url.  Respone body: #{response.body}")
+        message = "Unable to create short url.  Respone body: #{response.body}"
+        SignalApi.logger.error message
+        raise ApiException.new(message)
       end
     end
   end

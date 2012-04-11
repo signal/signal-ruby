@@ -1,4 +1,5 @@
 require "httparty"
+require "logger"
 
 require "signal_api/exceptions"
 require "signal_api/signal_http_api"
