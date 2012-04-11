@@ -7,4 +7,7 @@ module SignalApi
 
   # Authentication to the Signal platform failed.  Make sure your API key is correct.
   class AuthFailedException < StandardError; end
+
+  # An invalid parameter was passed to the given method
+  class InvalidParameterException < StandardError; end
 end
