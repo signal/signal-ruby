@@ -18,7 +18,16 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Before using any of the APIs, you will need to set your API key:
+
+    SignalApi.api_key = 'foobar123456abcxyz77'
+
+You may also specify where SignalApi should log messages (optional):
+
+    SignalApi.logger = Rails.logger
+    SignalApi.logger = Logger.new(STDERR)
+
+After SignalApi has been configured, you may use any of the API classes to interact with the Signal platform.
 
 ## Contributing
 
