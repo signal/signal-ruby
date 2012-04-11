@@ -27,9 +27,7 @@ module SignalApi
         data = response.parsed_response['short_url']
         new(data['id'], data['target_url'], "http://#{domain}/#{data['slug']}", domain)
       else
-        message = "Unable to create short url.  Respone body: #{response.body}"
-        SignalApi.logger.error message
-        raise ApiException.new(message)
+        handle_api_failure(response)
       end
     end
   end

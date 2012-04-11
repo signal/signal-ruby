@@ -4,4 +4,7 @@ module SignalApi
 
   # Exception raised when the api key is not properly set
   class InvalidApiKeyException < StandardError; end
+
+  # Authentication to the Signal platform failed.  Make sure your API key is correct.
+  class AuthFailedException < StandardError; end
 end
