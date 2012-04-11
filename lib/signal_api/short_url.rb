@@ -1,6 +1,19 @@
 module SignalApi
+
+  # Manage short URLs via Signal's URL shortening service
   class ShortUrl < SignalHttpApi
-    attr_reader :short_url, :target_url, :id, :domain
+
+    # The shortened URL
+    attr_reader :short_url
+
+    # The target URL that was shortened
+    attr_reader :target_url
+
+    # The ID of the shortend URL on the Signal platform
+    attr_reader :id
+
+    # The domain of the short URL
+    attr_reader :domain
 
     def initialize(id, target_url, short_url, domain)
       @id = id
@@ -9,6 +22,10 @@ module SignalApi
       @domain = domain
     end
 
+    # Create a short URL for the provided target URL
+    #
+    # @param [String] target The target URL that is to be shortened
+    # @param [String] domain The short URL domain to use
     def self.create(target, domain)
       body = <<-END
 <short_url>
@@ -31,4 +48,5 @@ module SignalApi
       end
     end
   end
+
 end
