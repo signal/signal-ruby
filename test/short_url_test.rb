@@ -42,7 +42,7 @@ END
   <error>The short URL domain is not available</error>
 </errors>
 END
-    assert_raises SignalApi::SignalApiException do
+    assert_raises SignalApi::ApiException do
       SignalApi::ShortUrl.create("http://www.google.com", "ix.ly")
     end
   end

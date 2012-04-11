@@ -22,7 +22,11 @@ module SignalApi
 
     # Get your Signal API key.
     def api_key
-      @api_key
+      if @api_key.nil? || @api_key.strip == ""
+        raise InvalidApiKeyException.new("The api_key is blank or nil.  Use SignalApi.api_key= to set it.")
+      else
+        @api_key
+      end
     end
 
     # Set the logger to be used by Signal.
