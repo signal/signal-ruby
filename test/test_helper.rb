@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'bundler'
+require 'fileutils'
 begin
   Bundler.setup(:default, :development)
 rescue Bundler::BundlerError => e
@@ -14,3 +15,5 @@ require 'shoulda'
 
 require 'signal_api'
 
+FileUtils.mkdir_p("log")
+SignalApi.logger = Logger.new("log/test.log")
