@@ -26,6 +26,8 @@ module SignalApi
     #
     # @param [String] target The target URL that is to be shortened
     # @param [String] domain The short URL domain to use
+    #
+    # @return [ShortUrl] A ShortUrl object representing the short URL on the Signal platform
     def self.create(target, domain)
       body = <<-END
 <short_url>

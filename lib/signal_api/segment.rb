@@ -43,6 +43,8 @@ module SignalApi
     # @param [String] name The name of the segment
     # @param [String] description A description of the segment
     # @param [SegmentType] segment_type The type of the segment
+    #
+    # @return [Segment] A Segment object representing the segment on the Signal platform
     def self.create(name, description, segment_type)
       if name.blank? || description.blank? || segment_type.blank?
         raise InvalidParameterException.new("name, description, and segment_type are all required")
