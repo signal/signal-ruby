@@ -17,5 +17,9 @@ module SignalApi
         raise ApiException.new(message)
       end
     end
+
+    def self.common_headers
+      { 'Content-Type' => 'application/xml', 'api_token' => SignalApi.api_key }
+    end
   end
 end

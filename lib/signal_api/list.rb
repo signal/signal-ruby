@@ -55,7 +55,7 @@ module SignalApi
       response = self.class.post("/api/subscription_campaigns/#{@campaign_id}/subscriptions.xml",
                                  :body => body,
                                  :format => :xml,
-                                 :headers => {'api_token' => SignalApi.api_key})
+                                 :headers => self.class.common_headers)
 
       if response.code != 200
         self.class.handle_api_failure(response)
