@@ -23,21 +23,7 @@ module SignalApi
     #                           for email subscriptions.
     # @option options [String] :source_keyword The source keyword to use when creating the subscription (for SMS subscriptions)
     def create_subscription(subscription_type, options={})
-      unless [SubscriptionType::SMS, SubscriptionType::EMAIL].include?(subscription_type)
-        raise InvalidParameterException.new("Invalid subscription type")
-      end
-
-      if options[:user].nil? || options[:user].empty?
-        raise InvalidParameterException.new("User data must be provided")
-      end
-
-      if subscription_type == SubscriptionType::SMS && !Phone.valid?(options[:user]['mobile-phone'])
-        raise InvalidParameterException.new("A valid mobile phone number required for SMS subscriptions")
-      end
-
-      if subscription_type == SubscriptionType::EMAIL && !EmailAddress.valid?(options[:user]['email-address'])
-        raise InvalidParameterException.new("A valid email address required for EMAIL subscriptions")
-      end
+      validate_create_subscription_request(subscription_type, options)
 
       builder = Builder::XmlMarkup.new
       body = builder.subscription do |subscription|
@@ -59,6 +45,26 @@ module SignalApi
 
       if response.code != 200
         self.class.handle_api_failure(response)
+      end
+    end
+
+    private
+
+    def validate_create_subscription_request(subscription_type, options)
+      unless [SubscriptionType::SMS, SubscriptionType::EMAIL].include?(subscription_type)
+        raise InvalidParameterException.new("Invalid subscription type")
+      end
+
+      if options[:user].nil? || options[:user].empty?
+        raise InvalidParameterException.new("User data must be provided")
+      end
+
+      if subscription_type == SubscriptionType::SMS && !Phone.valid?(options[:user]['mobile-phone'])
+        raise InvalidParameterException.new("A valid mobile phone number required for SMS subscriptions")
+      end
+
+      if subscription_type == SubscriptionType::EMAIL && !EmailAddress.valid?(options[:user]['email-address'])
+        raise InvalidParameterException.new("A valid email address required for EMAIL subscriptions")
       end
     end
 
