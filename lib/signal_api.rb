@@ -4,6 +4,8 @@ require "logger"
 
 require "signal_api/core_ext/nil_class"
 require "signal_api/core_ext/string"
+require "signal_api/core_ext/array"
+require "signal_api/core_ext/hash"
 
 require "signal_api/exceptions"
 require "signal_api/signal_http_api"
