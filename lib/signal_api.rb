@@ -1,11 +1,14 @@
 require "httparty"
+require "builder"
 require "logger"
 
 require "signal_api/exceptions"
 require "signal_api/signal_http_api"
 require "signal_api/phone"
+require "signal_api/email_address"
 
 require "signal_api/deliver_sms"
+require "signal_api/list"
 require "signal_api/short_url"
 
 module SignalApi
