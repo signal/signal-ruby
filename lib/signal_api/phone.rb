@@ -16,16 +16,6 @@ module SignalApi
       sanitized_phone_number
     end
 
-    # Return a 10 digit phone number for a given UMDA string (ie. tel:3120001111)
-    def self.umda_to_phone_number(umda)
-      if umda.downcase.include? "tel:"
-        phone_number = umda.downcase.split("tel:")[1]
-        phone_number
-      elsif umda.length == 10
-        umda
-      end
-    end
-
     def self.valid?(phone_number)
       return false if phone_number.nil? || phone_number.strip.empty?
       return false if self.sanitize(phone_number).size != 10
