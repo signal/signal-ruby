@@ -7,10 +7,11 @@ require "signal_api/core_ext/string"
 require "signal_api/core_ext/array"
 require "signal_api/core_ext/hash"
 
+require "signal_api/util/phone"
+require "signal_api/util/email_address"
+
 require "signal_api/exceptions"
 require "signal_api/signal_http_api"
-require "signal_api/phone"
-require "signal_api/email_address"
 
 require "signal_api/deliver_sms"
 require "signal_api/list"
