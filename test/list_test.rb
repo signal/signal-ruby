@@ -24,23 +24,23 @@ class ListTest < Test::Unit::TestCase
   should "raise an error if trying to create a subscription with an invalid subscription type" do
     list = SignalApi::List.new(1)
     exception = assert_raise SignalApi::InvalidParameterException do
-      list.create_subscription("foo", {})
+      list.create_subscription("foo", SignalApi::Contact.new)
     end
     assert_equal "Invalid subscription type", exception.message
   end
 
-  should "raise an error if no user data was provided" do
+  should "raise an error if no contact was provided" do
     list = SignalApi::List.new(1)
     exception = assert_raise SignalApi::InvalidParameterException do
-      list.create_subscription(SignalApi::SubscriptionType::SMS, {})
+      list.create_subscription(SignalApi::SubscriptionType::SMS, nil)
     end
-    assert_equal "User data must be provided", exception.message
+    assert_equal "A contact must be provided", exception.message
   end
 
   should "not be able to create a SMS subscription without a mobile phone number" do
     list = SignalApi::List.new(1)
     exception = assert_raise SignalApi::InvalidParameterException do
-      list.create_subscription(SignalApi::SubscriptionType::SMS, :user => {'first-name' => 'John'})
+      list.create_subscription(SignalApi::SubscriptionType::SMS, SignalApi::Contact.new('first-name' => 'John'))
     end
     assert_equal "A valid mobile phone number required for SMS subscriptions", exception.message
   end
@@ -48,7 +48,7 @@ class ListTest < Test::Unit::TestCase
   should "not be able to create a SMS subscription with an invalid mobile phone number" do
     list = SignalApi::List.new(1)
     exception = assert_raise SignalApi::InvalidParameterException do
-      list.create_subscription(SignalApi::SubscriptionType::SMS, :user => {'mobile-phone' => '1234', 'first-name' => 'John'})
+      list.create_subscription(SignalApi::SubscriptionType::SMS, SignalApi::Contact.new('mobile-phone' => '1234', 'first-name' => 'John'))
     end
     assert_equal "A valid mobile phone number required for SMS subscriptions", exception.message
   end
@@ -56,7 +56,7 @@ class ListTest < Test::Unit::TestCase
   should "not be able to create an email subscription without an email address" do
     list = SignalApi::List.new(1)
     exception = assert_raise SignalApi::InvalidParameterException do
-      list.create_subscription(SignalApi::SubscriptionType::EMAIL, :user => {'first-name' => 'John'})
+      list.create_subscription(SignalApi::SubscriptionType::EMAIL, SignalApi::Contact.new('first-name' => 'John'))
     end
     assert_equal "A valid email address required for EMAIL subscriptions", exception.message
   end
@@ -64,7 +64,7 @@ class ListTest < Test::Unit::TestCase
   should "not be able to create an email subscription with an invalid email address" do
     list = SignalApi::List.new(1)
     exception = assert_raise SignalApi::InvalidParameterException do
-      list.create_subscription(SignalApi::SubscriptionType::EMAIL, :user => {'email-address' => 'foo', 'first-name' => 'John'})
+      list.create_subscription(SignalApi::SubscriptionType::EMAIL, SignalApi::Contact.new('email-address' => 'foo', 'first-name' => 'John'))
     end
     assert_equal "A valid email address required for EMAIL subscriptions", exception.message
   end
@@ -72,7 +72,7 @@ class ListTest < Test::Unit::TestCase
   should "be able to create a new subscription" do
     FakeWeb.register_uri(:post, SignalApi::SignalHttpApi::BASE_URI + '/api/subscription_campaigns/1/subscriptions.xml', :status => ['200', 'Success'])
     list = SignalApi::List.new(1)
-    list.create_subscription(SignalApi::SubscriptionType::SMS, :source_keyword => 'FOO', :user => {'mobile-phone' => '3125551212', 'first-name' => 'John'})
+    list.create_subscription(SignalApi::SubscriptionType::SMS, SignalApi::Contact.new('mobile-phone' => '3125551212', 'first-name' => 'John'), :source_keyword => 'FOO')
   end
 
   should "raise an exception if the subscription could not be created" do
@@ -85,7 +85,7 @@ class ListTest < Test::Unit::TestCase
 END
     list = SignalApi::List.new(1)
     assert_raise SignalApi::ApiException do
-      list.create_subscription(SignalApi::SubscriptionType::SMS, :source_keyword => 'FOO', :user => {'mobile-phone' => '3125551212', 'first-name' => 'John'})
+      list.create_subscription(SignalApi::SubscriptionType::SMS, SignalApi::Contact.new('mobile-phone' => '3125551212', 'first-name' => 'John'), :source_keyword => 'FOO')
     end
   end
 

@@ -10,6 +10,7 @@ require "signal_api/core_ext/hash"
 require "signal_api/util/phone"
 require "signal_api/util/email_address"
 
+require "signal_api/contact"
 require "signal_api/exceptions"
 require "signal_api/signal_http_api"
 
