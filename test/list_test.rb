@@ -12,7 +12,7 @@ class ListTest < Test::Unit::TestCase
     FakeWeb.allow_net_connect = true
   end
 
-  should "not be able to create a List with a nil campaign id" do
+  should "not be able to create a List with a nil list id" do
     assert_raise SignalApi::InvalidParameterException do
       SignalApi::List.new(nil)
     end

@@ -9,9 +9,12 @@ module SignalApi
   # Manage subscriptions to, and send messages to subscribers of a List.
   class List < SignalHttpApi
 
-    def initialize(campaign_id)
-      @campaign_id = campaign_id
-      raise InvalidParameterException.new("campaign_id cannot be nil") if @campaign_id.nil?
+    # Create a new List object
+    #
+    # @param [Fixnum] list_id The ID of the list in the Signal platform
+    def initialize(list_id)
+      @list_id = list_id
+      raise InvalidParameterException.new("list_id cannot be nil") if @list_id.nil?
     end
 
     # Create a new subscription to the list.
@@ -37,9 +40,9 @@ module SignalApi
         end
       end
 
-      SignalApi.logger.info "Attempting to create a subscription to list #{@campaign_id}"
+      SignalApi.logger.info "Attempting to create a subscription to list #{@list_id}"
       SignalApi.logger.debug "Subscription data: #{body}"
-      response = self.class.post("/api/subscription_campaigns/#{@campaign_id}/subscriptions.xml",
+      response = self.class.post("/api/subscription_campaigns/#{@list_id}/subscriptions.xml",
                                  :body => body,
                                  :format => :xml,
                                  :headers => self.class.common_headers)
