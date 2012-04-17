@@ -58,6 +58,21 @@ module SignalApi
     def logger
       @logger || Logger.new("/dev/null")
     end
+
+    # Set the number of times failed API calls should be retried.
+    #
+    # @param [Fixnum] retries The number of times API calls should be retried
+    #
+    # @example
+    #   SignalApi.retries = 3
+    def retries=(retries)
+      @retries = retries
+    end
+
+    # Get the number of times failed API calls should be retried.
+    def retries
+      @retries || 0
+    end
   end
 
 end

@@ -8,6 +8,26 @@ module SignalApi
 
     protected
 
+    def self.with_retries
+      retry_counter = 0
+
+      begin
+        yield
+      rescue Exception => e
+        SignalApi.logger.error "Exception: #{e.message}"
+        sleep 1
+        retry_counter += 1
+
+        if retry_counter < SignalApi.retries
+          SignalApi.logger.warn "Re-trying..."
+          retry
+        else
+          SignalApi.logger.error "All retry attempts have failed."
+          raise
+        end
+      end
+    end
+
     def self.handle_api_failure(response)
       if response.code == 401
         raise AuthFailedException.new("Authentication to the Signal platform failed.  Make sure your API key is correct.")

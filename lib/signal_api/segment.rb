@@ -85,10 +85,12 @@ module SignalApi
 
       SignalApi.logger.info "Attempting to create a segment: name => #{name}, description => \"#{description}\", type = #{segment_type}}"
       SignalApi.logger.debug "Segment data: #{body}"
-      response = post("/api/filter_groups/create.xml",
-                      :body => body,
-                      :format => :xml,
-                      :headers => common_headers)
+      response = with_retries do
+        post("/api/filter_groups/create.xml",
+             :body => body,
+             :format => :xml,
+             :headers => common_headers)
+      end
 
       if response.code == 200
         data = response.parsed_response['subscription_list_filter_group']
@@ -119,10 +121,12 @@ module SignalApi
       end
 
       SignalApi.logger.info "Attempting to add users to segment #{@id}"
-      response = self.class.post("/api/filter_segments/#{@id}/update.xml",
-                                 :body => body,
-                                 :format => :xml,
-                                 :headers => self.class.common_headers)
+      response = self.class.with_retries do
+        self.class.post("/api/filter_segments/#{@id}/update.xml",
+                        :body => body,
+                        :format => :xml,
+                        :headers => self.class.common_headers)
+      end
 
       if response.code == 200
         data = response.parsed_response['subscription_list_segment_results']

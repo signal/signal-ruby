@@ -37,10 +37,12 @@ module SignalApi
       END
 
       SignalApi.logger.info "Attempting to create a short URL for #{target}"
-      response = post('/api/short_urls.xml',
-                      :body => body,
-                      :format => :xml,
-                      :headers => {'api_token' => SignalApi.api_key})
+      response = with_retries do
+        post('/api/short_urls.xml',
+             :body => body,
+             :format => :xml,
+             :headers => {'api_token' => SignalApi.api_key})
+      end
 
       if response.code == 201
         data = response.parsed_response['short_url']

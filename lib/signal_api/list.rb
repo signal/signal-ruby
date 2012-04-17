@@ -42,10 +42,12 @@ module SignalApi
 
       SignalApi.logger.info "Attempting to create a subscription to list #{@list_id}"
       SignalApi.logger.debug "Subscription data: #{body}"
-      response = self.class.post("/api/subscription_campaigns/#{@list_id}/subscriptions.xml",
-                                 :body => body,
-                                 :format => :xml,
-                                 :headers => self.class.common_headers)
+      response = self.class.with_retries do
+        self.class.post("/api/subscription_campaigns/#{@list_id}/subscriptions.xml",
+                        :body => body,
+                        :format => :xml,
+                        :headers => self.class.common_headers)
+      end
 
       if response.code != 200
         self.class.handle_api_failure(response)
