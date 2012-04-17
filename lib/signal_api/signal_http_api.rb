@@ -11,20 +11,24 @@ module SignalApi
     def self.with_retries
       retry_counter = 0
 
-      begin
-        yield
-      rescue Exception => e
-        SignalApi.logger.error "Exception: #{e.message}"
-        sleep 1
-        retry_counter += 1
+      if SignalApi.retries > 0
+        begin
+          yield
+        rescue Exception => e
+          SignalApi.logger.error "Exception: #{e.message}"
+          sleep 1
+          retry_counter += 1
 
-        if retry_counter < SignalApi.retries
-          SignalApi.logger.warn "Re-trying..."
-          retry
-        else
-          SignalApi.logger.error "All retry attempts have failed."
-          raise
+          if retry_counter < SignalApi.retries
+            SignalApi.logger.warn "Re-trying..."
+            retry
+          else
+            SignalApi.logger.error "All retry attempts have failed."
+            raise
+          end
         end
+      else
+        yield
       end
     end
 
