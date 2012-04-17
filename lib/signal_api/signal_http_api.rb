@@ -9,9 +9,10 @@ module SignalApi
     protected
 
     def self.with_retries
-      retry_counter = 0
-
-      if SignalApi.retries > 0
+      if SignalApi.retries <= 0
+        yield
+      else
+        retry_counter = 0
         begin
           yield
         rescue Exception => e
@@ -27,8 +28,6 @@ module SignalApi
             raise
           end
         end
-      else
-        yield
       end
     end
 
