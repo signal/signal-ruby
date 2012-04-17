@@ -56,7 +56,6 @@ module SignalApi
     def retries
       @retries || 0
     end
-  end
 
     # Set the default timeout for API calls.  Defaults to 15 seconds.
     #
@@ -71,6 +70,16 @@ module SignalApi
     # Get the default timeout for API calls.
     def timeout
       @timeout || 15
+    end
+
+    # @private
+    def base_uri=(base_uri)
+      @base_uri = base_uri
+    end
+
+    # @private
+    def base_uri
+      @base_uri || "https://app.signalhq.com"
     end
   end
 

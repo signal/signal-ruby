@@ -17,7 +17,7 @@ class ShortUrlTest < Test::Unit::TestCase
   end
 
   should "raise an exception if authentication failed" do
-    FakeWeb.register_uri(:post, SignalApi::SignalHttpApi::BASE_URI + '/api/short_urls.xml', :content_type => 'application/xml', :status => ['401', 'Unauthorized'])
+    FakeWeb.register_uri(:post, SignalApi.base_uri + '/api/short_urls.xml', :content_type => 'application/xml', :status => ['401', 'Unauthorized'])
     assert_raise SignalApi::AuthFailedException do
       short_url = SignalApi::ShortUrl.create("http://www.google.com", "ix.ly")
     end

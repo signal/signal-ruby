@@ -49,7 +49,7 @@ class SegmentTest < Test::Unit::TestCase
   end
 
   should "be able to create a segment" do
-    FakeWeb.register_uri(:post, SignalApi::SignalHttpApi::BASE_URI + '/api/filter_groups/create.xml', :content_type => 'application/xml', :status => ['200', 'Success'], :body => <<-END)
+    FakeWeb.register_uri(:post, SignalApi.base_uri + '/api/filter_groups/create.xml', :content_type => 'application/xml', :status => ['200', 'Success'], :body => <<-END)
 <?xml version="1.0" encoding="UTF-8"?>
 <subscription-list-filter-group>
   <name>Segment 1</name>
@@ -72,7 +72,7 @@ END
   end
 
   should "raise an exception if unable to create the segment" do
-    FakeWeb.register_uri(:post, SignalApi::SignalHttpApi::BASE_URI + '/api/filter_groups/create.xml', :content_type => 'application/xml', :status => ['422', 'Unprocessable Entity'], :body => <<-END)
+    FakeWeb.register_uri(:post, SignalApi.base_uri + '/api/filter_groups/create.xml', :content_type => 'application/xml', :status => ['422', 'Unprocessable Entity'], :body => <<-END)
 <errors><error>name^A filter group with this name already exists</error></errors>
 END
     assert_raise SignalApi::ApiException do
@@ -91,7 +91,7 @@ END
   end
 
   should "be able to add a collection of segment users to a static segment" do
-    FakeWeb.register_uri(:post, SignalApi::SignalHttpApi::BASE_URI + '/api/filter_segments/1/update.xml', :content_type => 'application/xml', :status => ['200', 'Success'], :body => <<-END)
+    FakeWeb.register_uri(:post, SignalApi.base_uri + '/api/filter_segments/1/update.xml', :content_type => 'application/xml', :status => ['200', 'Success'], :body => <<-END)
 <subscription_list_segment_results>
   <users_not_found>
     <user_not_found>user with email john@test.com not found</user_not_found>
@@ -120,7 +120,7 @@ END
   end
 
   should "raise an exception if unable to add users to the segment" do
-    FakeWeb.register_uri(:post, SignalApi::SignalHttpApi::BASE_URI + '/api/filter_segments/1/update.xml', :content_type => 'application/xml', :status => ['422', 'Success'], :body => <<-END)
+    FakeWeb.register_uri(:post, SignalApi.base_uri + '/api/filter_segments/1/update.xml', :content_type => 'application/xml', :status => ['422', 'Success'], :body => <<-END)
 <?xml version="1.0" encoding="UTF-8"?>
 <error>
   <request>http://textme.dev/api/filter_segments/63/update.xml</request>

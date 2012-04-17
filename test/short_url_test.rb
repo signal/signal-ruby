@@ -13,7 +13,7 @@ class ShortUrlTest < Test::Unit::TestCase
   end
 
   should "be able to create a short URL for the given target URL" do
-    FakeWeb.register_uri(:post, SignalApi::SignalHttpApi::BASE_URI + '/api/short_urls.xml', :content_type => 'application/xml', :status => ['201', 'Created'], :body => <<-END)
+    FakeWeb.register_uri(:post, SignalApi.base_uri + '/api/short_urls.xml', :content_type => 'application/xml', :status => ['201', 'Created'], :body => <<-END)
 <?xml version="1.0" encoding="UTF-8"?>
 <short-url>
   <slug>e25s</slug>
@@ -34,7 +34,7 @@ END
   end
 
   should "raise an exception if the short URL cannot be created" do
-    FakeWeb.register_uri(:post, SignalApi::SignalHttpApi::BASE_URI + '/api/short_urls.xml', :content_type => 'application/xml', :status => ['400', 'Bad Request'], :body => <<-END)
+    FakeWeb.register_uri(:post, SignalApi.base_uri + '/api/short_urls.xml', :content_type => 'application/xml', :status => ['400', 'Bad Request'], :body => <<-END)
 <?xml version="1.0" encoding="UTF-8"?>
 <errors>
   <error>Slug can't be blank</error>
