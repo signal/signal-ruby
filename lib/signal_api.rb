@@ -2,23 +2,6 @@ require "httparty"
 require "builder"
 require "logger"
 
-require "signal_api/core_ext/nil_class"
-require "signal_api/core_ext/string"
-require "signal_api/core_ext/array"
-require "signal_api/core_ext/hash"
-
-require "signal_api/util/phone"
-require "signal_api/util/email_address"
-
-require "signal_api/contact"
-require "signal_api/exceptions"
-require "signal_api/signal_http_api"
-
-require "signal_api/deliver_sms"
-require "signal_api/list"
-require "signal_api/segment"
-require "signal_api/short_url"
-
 module SignalApi
 
   # Interact with the Signal platform via its published web API.
@@ -59,7 +42,7 @@ module SignalApi
       @logger || Logger.new("/dev/null")
     end
 
-    # Set the number of times failed API calls should be retried.
+    # Set the number of times failed API calls should be retried.  Defaults to 0.
     #
     # @param [Fixnum] retries The number of times API calls should be retried
     #
@@ -75,4 +58,38 @@ module SignalApi
     end
   end
 
+    # Set the default timeout for API calls.  Defaults to 15 seconds.
+    #
+    # @param [Fixnum] timeout The default timeout (in seconds) for API calls
+    #
+    # @example
+    #   SignalApi.timeout = 5
+    def timeout=(timeout)
+      @timeout = timeout
+    end
+
+    # Get the default timeout for API calls.
+    def timeout
+      @timeout || 15
+    end
+  end
+
 end
+
+require "signal_api/core_ext/nil_class"
+require "signal_api/core_ext/string"
+require "signal_api/core_ext/array"
+require "signal_api/core_ext/hash"
+
+require "signal_api/util/phone"
+require "signal_api/util/email_address"
+
+require "signal_api/contact"
+require "signal_api/exceptions"
+require "signal_api/signal_http_api"
+
+require "signal_api/deliver_sms"
+require "signal_api/list"
+require "signal_api/segment"
+require "signal_api/short_url"
+
