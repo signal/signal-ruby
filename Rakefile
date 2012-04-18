@@ -15,22 +15,22 @@ require 'yard'
 
 task :default => :test
 
-Rake::TestTask.new(:api_test) do |test|
-  test.libs << 'lib' << 'test'
-  test.pattern = ENV['TEST'] || "test/api/**/*_test.rb"
-  test.verbose = true
+namespace :test do
+  Rake::TestTask.new(:api) do |test|
+    test.libs << 'lib' << 'test'
+    test.pattern = ENV['TEST'] || "test/api/**/*_test.rb"
+    test.verbose = true
+  end
+
+  Rake::TestTask.new(:mocks) do |test|
+    test.libs << 'lib' << 'test'
+    test.pattern = ENV['TEST'] || "test/mocks/**/*_test.rb"
+    test.verbose = true
+  end
 end
 
-Rake::TestTask.new(:mocks_test) do |test|
-  test.libs << 'lib' << 'test'
-  test.pattern = ENV['TEST'] || "test/mocks/**/*_test.rb"
-  test.verbose = true
-end
-
-Rake::TestTask.new(:test) do |test|
-  Rake::Task["api_test"].invoke
-  Rake::Task["mocks_test"].invoke
-end
+desc 'Run all of the tests'
+task :test => ["test:api", "test:mocks"]
 
 YARD::Rake::YardocTask.new do |t|
   t.files = ['lib/**/*.rb']
