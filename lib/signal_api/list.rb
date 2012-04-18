@@ -55,7 +55,7 @@ module SignalApi
     end
 
 
-    # destroy a subscription existing on the list
+    # Destroy a subscription which exists in this list.
     #
     # @param [SubscriptionType] subscription_type The type of subscription to destroy
     # @param [Contact] contact The contact to destroy the subscription for.  The contact must contain a valid
