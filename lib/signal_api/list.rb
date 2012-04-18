@@ -54,9 +54,56 @@ module SignalApi
       end
     end
 
+
+    # destroy a subscription existing on the list
+    #
+    # @param [SubscriptionType] subscription_type The type of subscription to destroy
+    # @param [Contact] contact The contact to destroy the subscription for.  The contact must contain a valid
+    #                          mobile phone number for SMS subscriptions, and a valid email address for
+    #                          EMAIL subscriptions.  
+    def destroy_subscription(subscription_type, contact)
+      validate_destroy_subscription_request(subscription_type, contact)
+
+      SignalApi.logger.info "Attempting to destroy a subscription to list #{@list_id}"
+      SignalApi.logger.debug "Contact data: #{contact.inspect}"
+      
+      if subscription_type == SubscriptionType::SMS
+        contact_id = contact.mobile_phone
+      else
+        contact_id = contact.email_address
+      end
+
+      response = self.class.with_retries do
+        self.class.delete("/api/subscription_campaigns/#{@list_id}/#{contact_id}.xml",
+                        :headers => self.class.common_headers)
+      end
+
+      if response.code != 200
+        self.class.handle_api_failure(response)
+      end
+    end
+
     private
 
     def validate_create_subscription_request(subscription_type, contact, options)
+      unless [SubscriptionType::SMS, SubscriptionType::EMAIL].include?(subscription_type)
+        raise InvalidParameterException.new("Invalid subscription type")
+      end
+
+      if contact.nil?
+        raise InvalidParameterException.new("A contact must be provided")
+      end
+
+      if subscription_type == SubscriptionType::SMS && !Phone.valid?(contact.mobile_phone)
+        raise InvalidParameterException.new("A valid mobile phone number required for SMS subscriptions")
+      end
+
+      if subscription_type == SubscriptionType::EMAIL && !EmailAddress.valid?(contact.email_address)
+        raise InvalidParameterException.new("A valid email address required for EMAIL subscriptions")
+      end
+    end
+
+    def validate_destroy_subscription_request(subscription_type, contact)
       unless [SubscriptionType::SMS, SubscriptionType::EMAIL].include?(subscription_type)
         raise InvalidParameterException.new("Invalid subscription type")
       end
