@@ -132,7 +132,11 @@ module SignalApi
         data = response.parsed_response['subscription_list_segment_results']
 
         if data['users_not_found'] && data['users_not_found']['user_not_found']
-          SignalApi.logger.warn data['users_not_found']['user_not_found'].join(", ")
+          if data['users_not_found']['user_not_found'].respond_to?(:join)
+            SignalApi.logger.warn data['users_not_found']['user_not_found'].join(", ")
+          else
+            SignalApi.logger.warn data['users_not_found']['user_not_found']
+          end
         end
 
         { :total_users_processed => (data['total_users_processed'] || 0).to_i,
