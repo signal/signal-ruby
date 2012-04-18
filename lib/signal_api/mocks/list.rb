@@ -9,5 +9,11 @@ module SignalApi
     def create_subscription_additional_info
       { :list_id => @list_id }
     end
+
+    mock_method(:destroy_subscription, :subscription_type, :contact)
+
+    def destroy_subscription_additional_info
+      { :list_id => @list_id }
+    end
   end
 end

@@ -17,4 +17,13 @@ class ListMockTest < Test::Unit::TestCase
     assert_equal 2, SignalApi::List.mock_method_calls[:create_subscription].last[:options][:source_campaign_id]
   end
 
+  should "be able to mock destroy_subscription" do
+    list = SignalApi::List.new(1)
+    list.destroy_subscription(SignalApi::SubscriptionType::SMS, SignalApi::Contact.new('mobile-phone' => '3125551212'))
+
+    assert_equal 1, SignalApi::List.mock_method_calls[:destroy_subscription].last[:list_id]
+    assert_equal "SMS", SignalApi::List.mock_method_calls[:destroy_subscription].last[:subscription_type]
+    assert_equal "3125551212", SignalApi::List.mock_method_calls[:destroy_subscription].last[:contact].mobile_phone
+  end
+
 end
