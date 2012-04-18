@@ -1,5 +1,4 @@
 module SignalApi
-
   module ApiMock
 
     def self.included(base)
@@ -66,5 +65,6 @@ module SignalApi
         @@mock_method_calls.keys { |k| @@mock_method_calls[k] = [] }
       end
     end
+
   end
 end
