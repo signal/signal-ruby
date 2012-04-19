@@ -6,6 +6,16 @@ module SignalApi
     EMAIL = "EMAIL"
   end
 
+  # Represents a message to be sent to users on a particular carrier
+  class CarrierOverrideMessage
+    attr_accessor :carrier_id, :text
+
+    def initialize(carrier_id, text)
+      @carrier_id = carrier_id
+      @text = text
+    end
+  end
+
   # Manage subscriptions to, and send messages to subscribers of a List.
   class List < SignalHttpApi
 
@@ -54,7 +64,6 @@ module SignalApi
       end
     end
 
-
     # Destroy a subscription which exists in this list.
     #
     # @param [SubscriptionType] subscription_type The type of subscription to destroy
@@ -75,10 +84,63 @@ module SignalApi
 
       response = self.class.with_retries do
         self.class.delete("/api/subscription_campaigns/#{@list_id}/#{contact_id}.xml",
-                        :headers => self.class.common_headers)
+                          :headers => self.class.common_headers)
       end
 
       if response.code != 200
+        self.class.handle_api_failure(response)
+      end
+    end
+
+    # Sends an SMS message to the subscribers of the subscription list.
+    #
+    # @param [String] description A description of the message.
+    # @param [String] text The message to send.  Must not be greater than 160 characters.
+    # @param [Hash] options <b>Optional</b> The options used when sending the message.
+    # @option options [Time] :send_at The date and time to send the message. The message will be
+    #                                 sent immediately if not provided.
+    # @option options [Fixnum] :segment_id The id of the segment to send the message to. If not
+    #                                      specified, the message will be sent to all subscribers in the list.
+    # @option options [Array<CarrierOverrideMessage>] :carrier_overrides An alternate text message to send to
+    #                                      users on a particular carrier.
+    # @return [Fixnum] The ID of the scheduled message on the Signal platform.
+    def send_message(description, text, options={})
+      raise InvalidParameterException.new("A description must be provided") if description.blank?
+      raise InvalidParameterException.new("A text message must be provided") if text.blank?
+      raise InvalidParameterException.new("The text message must not be greater than 160 characters") if text.size > 160
+
+      builder = Builder::XmlMarkup.new
+      body = builder.message do |message|
+        message.description(description)
+        message.text(text)
+        message.send_at(options[:send_at].strftime("%Y-%m-%d %H:%M:%S")) if options[:send_at]
+        message.segment_id(options[:segment_id]) if options[:segment_id]
+
+        if options[:carrier_overrides]
+          message.carrier_overrides do |carrier_overrides|
+            options[:carrier_overrides].each do |carrier_override_message|
+              carrier_overrides.carrier_override do |carrier_override|
+                carrier_override.carrier_id(carrier_override_message.carrier_id)
+                carrier_override.text(carrier_override_message.text)
+              end
+            end
+          end
+        end
+      end
+
+      SignalApi.logger.info "Attempting to send a message to list #{@list_id}"
+      SignalApi.logger.debug "Message data: #{body}"
+      response = self.class.with_retries do
+        self.class.post("/api/subscription_campaigns/#{@list_id}/send_message.xml",
+                        :body => body,
+                        :format => :xml,
+                        :headers => self.class.common_headers)
+      end
+
+      if response.code == 200
+        data = response.parsed_response['scheduled_message']
+        data['id']
+      else
         self.class.handle_api_failure(response)
       end
     end
