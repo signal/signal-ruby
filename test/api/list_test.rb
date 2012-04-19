@@ -29,7 +29,7 @@ class ListTest < Test::Unit::TestCase
     assert_equal "Invalid subscription type", exception.message
   end
 
-  should "raise an error if no contact was provided" do
+  should "raise an error if calling create_subscription and no contact was provided" do
     list = SignalApi::List.new(1)
     exception = assert_raise SignalApi::InvalidParameterException do
       list.create_subscription(SignalApi::SubscriptionType::SMS, nil)
@@ -100,7 +100,7 @@ END
     assert_equal "Invalid subscription type", exception.message
   end
 
-  should "raise an error if no contact was provided" do
+  should "raise an error if calling destroy_subscription andno contact was provided" do
     list = SignalApi::List.new(1)
     exception = assert_raise SignalApi::InvalidParameterException do
       list.destroy_subscription(SignalApi::SubscriptionType::SMS, nil)
