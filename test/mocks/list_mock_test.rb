@@ -8,6 +8,8 @@ class ListMockTest < Test::Unit::TestCase
   end
 
   should "be able to mock create_subscription" do
+    assert_equal 0, SignalApi::List.mock_method_calls.values.flatten.length
+
     list = SignalApi::List.new(1)
     list.create_subscription(SignalApi::SubscriptionType::SMS, SignalApi::Contact.new('mobile-phone' => '3125551212'), { :source_campaign_id => 2 })
 
@@ -18,6 +20,8 @@ class ListMockTest < Test::Unit::TestCase
   end
 
   should "be able to mock destroy_subscription" do
+    assert_equal 0, SignalApi::List.mock_method_calls.values.flatten.length
+
     list = SignalApi::List.new(1)
     list.destroy_subscription(SignalApi::SubscriptionType::SMS, SignalApi::Contact.new('mobile-phone' => '3125551212'))
 

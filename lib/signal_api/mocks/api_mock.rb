@@ -62,7 +62,7 @@ module SignalApi
       end
 
       def clear_mock_data
-        @@mock_method_calls.keys { |k| @@mock_method_calls[k] = [] }
+        @@mock_method_calls.keys.each { |k| @@mock_method_calls[k] = [] }
       end
     end
 
