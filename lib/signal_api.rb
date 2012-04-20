@@ -65,6 +65,7 @@ module SignalApi
     #   SignalApi.timeout = 5
     def timeout=(timeout)
       @timeout = timeout
+      api_classes.each { |clazz| clazz.default_timeout @timeout }
     end
 
     # Get the default timeout for API calls.
@@ -75,11 +76,18 @@ module SignalApi
     # @private
     def base_uri=(base_uri)
       @base_uri = base_uri
+      api_classes.each { |clazz| clazz.base_uri @base_uri }
     end
 
     # @private
     def base_uri
       @base_uri || "https://app.signalhq.com"
+    end
+
+    private
+
+    def api_classes
+      [ List, Segment, ShortUrl ]
     end
   end
 
