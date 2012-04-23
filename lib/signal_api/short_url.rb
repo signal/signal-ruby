@@ -41,7 +41,7 @@ module SignalApi
         post('/api/short_urls.xml',
              :body => body,
              :format => :xml,
-             :headers => {'api_token' => SignalApi.api_key})
+             :headers => common_headers)
       end
 
       if response.code == 201
