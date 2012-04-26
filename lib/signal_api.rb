@@ -39,7 +39,7 @@ module SignalApi
 
     # Get the logger used by Signal.
     def logger
-      @logger || Logger.new("/dev/null")
+      @logger ||= Logger.new("/dev/null")
     end
 
     # Set the number of times failed API calls should be retried.  Defaults to 0.
