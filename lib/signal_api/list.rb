@@ -101,6 +101,7 @@ module SignalApi
     #                                 sent immediately if not provided.
     # @option options [Fixnum] :segment_id The id of the segment to send the message to. If not
     #                                      specified, the message will be sent to all subscribers in the list.
+    # @option options [Array<Fixnum>] :tags An array of tag ids to tag the scheduled message with.
     # @option options [Array<CarrierOverrideMessage>] :carrier_overrides An alternate text message to send to
     #                                      users on a particular carrier.
     # @return [Fixnum] The ID of the scheduled message on the Signal platform.
@@ -116,8 +117,14 @@ module SignalApi
         message.send_at(options[:send_at].strftime("%Y-%m-%d %H:%M:%S")) if options[:send_at]
         message.segment_id(options[:segment_id]) if options[:segment_id]
 
+        if options[:tags]
+          message.tags(:type => :array) do |tags|
+            options[:tags].each { |tag_id| tags.tag(tag_id) }
+          end
+        end
+
         if options[:carrier_overrides]
-          message.carrier_overrides do |carrier_overrides|
+          message.carrier_overrides(:type => :array) do |carrier_overrides|
             options[:carrier_overrides].each do |carrier_override_message|
               carrier_overrides.carrier_override do |carrier_override|
                 carrier_override.carrier_id(carrier_override_message.carrier_id)

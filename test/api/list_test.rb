@@ -178,7 +178,7 @@ END
   <id type="integer">101</id>
 </scheduled-message>
 END
-    message_id = @list.send_message("Some description", "A message", :send_at => Time.local(2012, 4, 17, 10, 05, 07), :segment_id => 7,
+    message_id = @list.send_message("Some description", "A message", :send_at => Time.local(2012, 4, 17, 10, 05, 07), :segment_id => 7, :tags => [1, 2],
                                     :carrier_overrides => [SignalApi::CarrierOverrideMessage.new(2, "some override message")])
     assert_equal 101, message_id
   end
