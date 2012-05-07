@@ -8,7 +8,7 @@ module SignalApi
     # @param [String] coupon_group_tag The tag for the coupon group in Textme to consume this coupon from.]
     # @param [String] mobile_phone The mobile phone to consume this coupon for
     #
-    # @return [ShortUrl] A ShortUrl object representing the short URL on the Signal platform
+    # @return a coupon code 
     def self.consume_coupon(coupon_group_tag, mobile_phone)
       SignalApi.logger.info "Attempting to consume coupon from group #{coupon_group_tag} #{mobile_phone}"
 
