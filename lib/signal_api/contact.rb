@@ -20,5 +20,43 @@ module SignalApi
       @attributes['email-address']
     end
 
+    def save
+      validate_contact_update
+
+      xml = Builder::XmlMarkup.new
+      xml.user_attributes {
+        attributes.each do |key, value|
+          xml.tag!(key, value)
+        end
+      }
+      
+      response = with_retries do
+        put("/api/contacts/#{mobile_phone}",
+             :body => xml.target!,
+             :format => :xml,
+             :headers => common_headers)
+      end
+
+      if response.code == 200
+        true
+      else
+        handle_api_failure(response)
+      end
+
+    end
+
+    private
+    def validate_contact_update
+      if mobile_phone.blank?
+        raise InvalidParameterException.new("mobile_phone is required")
+      end
+
+      if attributes.count < 2
+        raise InvalidParameterException.new("nothing to update, only mobile phone provided")
+      end
+
+    end
+
+
   end
 end
