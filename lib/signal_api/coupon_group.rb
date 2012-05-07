@@ -23,14 +23,13 @@ module SignalApi
       }
 
       response = with_retries do
-        post('/api/coupon_groups/consume_coupon.xml',
+        get('/api/coupon_groups/consume_coupon.xml',
              :body => xml.target!,
              :format => :xml,
              :headers => common_headers)
       end
 
       if response.code == 200
-        puts "response = #{response.inspect}"
         response.parsed_response['coupon_code']
       else
         handle_api_failure(response)
