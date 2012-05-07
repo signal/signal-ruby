@@ -110,4 +110,5 @@ require "signal_api/list"
 require "signal_api/segment"
 require "signal_api/short_url"
 require "signal_api/coupon_group"
+require "signal_api/carrier"
 
