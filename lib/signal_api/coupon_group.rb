@@ -23,7 +23,7 @@ module SignalApi
       }
 
       response = with_retries do
-        post('/coupon_groups/consume_coupon.xml',
+        post('/api/coupon_groups/consume_coupon.xml',
              :body => xml.target!,
              :format => :xml,
              :headers => common_headers)

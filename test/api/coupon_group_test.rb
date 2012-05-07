@@ -18,7 +18,7 @@ class CouponGroupTest < Test::Unit::TestCase
 <coupon_code>AB1234</coupon_code>
 END
 
-    FakeWeb.register_uri(:post, SignalApi.base_uri + '/coupon_groups/consume_coupon.xml', :content_type => 'application/xml', :status => ['200', 'Ok'], :body => body)
+    FakeWeb.register_uri(:post, SignalApi.base_uri + '/api/coupon_groups/consume_coupon.xml', :content_type => 'application/xml', :status => ['200', 'Ok'], :body => body)
     coupon_code = SignalApi::CouponGroup.consume_coupon("tag", "6843456782")
     assert_equal "AB1234", coupon_code
   end
