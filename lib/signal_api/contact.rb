@@ -36,7 +36,7 @@ module SignalApi
       contact_identifier = mobile_phone.blank? ? email_address : mobile_phone
 
       response = with_retries do
-        put("/api/contacts/#{contact_identifier}",
+        put("/api/contacts/#{contact_identifier}.xml",
             :body => xml.target!,
             :format => :xml,
             :headers => common_headers)
