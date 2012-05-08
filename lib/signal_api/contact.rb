@@ -20,15 +20,18 @@ module SignalApi
       @attributes['email-address']
     end
 
+    # Update the contact's data on the Signal platform.
+    #
+    # @return true If the contact's data was saved successfully.
     def save
       validate_contact_update
 
       xml = Builder::XmlMarkup.new
-      xml.user_attributes {
+      xml.user_attributes do
         attributes.each do |key, value|
           xml.tag!(key, value)
         end
-      }
+      end
 
       response = with_retries do
         put("/api/contacts/#{mobile_phone}",
