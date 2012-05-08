@@ -33,8 +33,10 @@ module SignalApi
         end
       end
 
+      contact_identifier = mobile_phone.blank? ? email_address : mobile_phone
+
       response = with_retries do
-        put("/api/contacts/#{mobile_phone}",
+        put("/api/contacts/#{contact_identifier}",
             :body => xml.target!,
             :format => :xml,
             :headers => common_headers)
@@ -50,8 +52,8 @@ module SignalApi
     private
 
     def validate_contact_update
-      raise InvalidParameterException.new("mobile_phone is required") if mobile_phone.blank?
-      raise InvalidParameterException.new("nothing to update, only mobile phone provided") if attributes.count < 2
+      raise InvalidParameterException.new("mobile_phone or email is required") if mobile_phone.blank? && email_address.blank?
+      raise InvalidParameterException.new("nothing to update, only identifier provided") if attributes.count < 2
     end
 
   end
