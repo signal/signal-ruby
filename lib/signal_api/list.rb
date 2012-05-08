@@ -69,6 +69,9 @@ module SignalApi
         elsif response.body.include?("already signed up")
           SignalApi.logger.info response.body
           return false
+        elsif response.body.include?("Subscriber cannot be re-added since they have unsubscribed within the past")
+          SignalApi.logger.info response.body
+          return false
         else
           self.class.handle_api_failure(response)
         end
