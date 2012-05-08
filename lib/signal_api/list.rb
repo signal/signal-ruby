@@ -37,7 +37,7 @@ module SignalApi
     # @param [Hash] options <b>Optional</b> The options used to create the subscription
     # @option options [String] :source_keyword The source keyword to use when creating the subscription (for SMS subscriptions)
     #
-    # @return [Bool] True if a subscription was created, false if the subscription already existed. 
+    # @return [Bool] True if a subscription was created, false if the subscription already existed.
     def create_subscription(subscription_type, contact, options={})
       validate_create_subscription_request(subscription_type, contact, options)
 
@@ -76,7 +76,6 @@ module SignalApi
           self.class.handle_api_failure(response)
         end
       end
-        
     end
 
     # Destroy a subscription which exists in this list.
@@ -86,7 +85,7 @@ module SignalApi
     #                          mobile phone number for SMS subscriptions, and a valid email address for
     #                          EMAIL subscriptions.  
     #
-    # @return [Bool] True if a subscription was desctroyed, false if the subscription did not exist. 
+    # @return [Bool] True if a subscription was desctroyed, false if the subscription did not exist.
     def destroy_subscription(subscription_type, contact)
       validate_destroy_subscription_request(subscription_type, contact)
 
@@ -112,7 +111,7 @@ module SignalApi
           return false
         else
           self.class.handle_api_failure(response)
-        end 
+        end
       end
     end
 
@@ -212,10 +211,6 @@ module SignalApi
       if subscription_type == SubscriptionType::EMAIL && !EmailAddress.valid?(contact.email_address)
         raise InvalidParameterException.new("A valid email address required for EMAIL subscriptions")
       end
-    end
-
-    def handle_destroy_subscription_response(response)
-
     end
 
   end
