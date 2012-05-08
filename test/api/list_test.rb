@@ -92,6 +92,17 @@ END
     assert_equal false, @list.create_subscription(SignalApi::SubscriptionType::SMS, SignalApi::Contact.new('mobile-phone' => '3125551212', 'first-name' => 'John'), :source_keyword => 'FOO')
   end
 
+  should "returns false if the subscription already exists but was unconfirmed" do
+    FakeWeb.register_uri(:post, SignalApi.base_uri + '/api/subscription_campaigns/1/subscriptions.xml', :status => ['422', 'Bad Request'], :body => <<-END)
+<?xml version="1.0" encoding="UTF-8"?>
+<error>
+  <request>/api/subscription_campaigns/1/subscriptions.xml</request>
+  <message>User already subscribed, resending confirmation message: to confirm reply y</message>
+</error>
+END
+    assert_equal false, @list.create_subscription(SignalApi::SubscriptionType::SMS, SignalApi::Contact.new('mobile-phone' => '3125551212', 'first-name' => 'John'), :source_keyword => 'FOO')
+  end
+
   should "raise an exception if the subscription could not be created due to invalid mobile" do
     FakeWeb.register_uri(:post, SignalApi.base_uri + '/api/subscription_campaigns/1/subscriptions.xml', :status => ['422', 'Bad Request'], :body => <<-END)
 <?xml version="1.0" encoding="UTF-8"?>
