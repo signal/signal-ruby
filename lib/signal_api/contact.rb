@@ -29,12 +29,12 @@ module SignalApi
           xml.tag!(key, value)
         end
       }
-      
+
       response = with_retries do
         put("/api/contacts/#{mobile_phone}",
-             :body => xml.target!,
-             :format => :xml,
-             :headers => common_headers)
+            :body => xml.target!,
+            :format => :xml,
+            :headers => common_headers)
       end
 
       if response.code == 200
@@ -42,21 +42,14 @@ module SignalApi
       else
         handle_api_failure(response)
       end
-
     end
 
     private
+
     def validate_contact_update
-      if mobile_phone.blank?
-        raise InvalidParameterException.new("mobile_phone is required")
-      end
-
-      if attributes.count < 2
-        raise InvalidParameterException.new("nothing to update, only mobile phone provided")
-      end
-
+      raise InvalidParameterException.new("mobile_phone is required") if mobile_phone.blank?
+      raise InvalidParameterException.new("nothing to update, only mobile phone provided") if attributes.count < 2
     end
-
 
   end
 end

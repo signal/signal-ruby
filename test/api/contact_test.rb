@@ -14,9 +14,7 @@ class ContactTest < Test::Unit::TestCase
   end
 
   should "be able to save a contact with lots of info" do
-
     contact = SignalApi::Contact.new('mobile_phone' => '3125551212', 'email_address' => 'bill.johnson@domain.com', 'first_name' => 'bill', 'last_name' => 'johnson', 'zip_code' => '60606')
-
     contact.save
 
     attributes = SignalApi::Contact.mock_method_calls[:save].last[:attributes]
@@ -28,9 +26,7 @@ class ContactTest < Test::Unit::TestCase
   end
 
   should "be able to save a contact with little info" do
-
     contact = SignalApi::Contact.new('mobile_phone' => '3125551212', 'email_address' => 'bill.johnson@domain.com')
-
     contact.save
 
     attributes = SignalApi::Contact.mock_method_calls[:save].last[:attributes]
@@ -41,37 +37,33 @@ class ContactTest < Test::Unit::TestCase
   should "should throw exceptions no parms" do
     contact = SignalApi::Contact.new()
 
-    assert_raise SignalApi::InvalidParameterException do 
+    assert_raise SignalApi::InvalidParameterException do
       contact.send(:validate_contact_update)
     end
-
   end
 
   should "should throw exceptions one parm not mobile_phone" do
     contact = SignalApi::Contact.new('first_name' => 'bill')
 
-    assert_raise SignalApi::InvalidParameterException do 
+    assert_raise SignalApi::InvalidParameterException do
       contact.send(:validate_contact_update)
     end
-
   end
 
   should "should throw exceptions one parm mobile_phone" do
     contact = SignalApi::Contact.new('mobile_phone' => '3125551212')
 
-    assert_raise SignalApi::InvalidParameterException do 
+    assert_raise SignalApi::InvalidParameterException do
       contact.send(:validate_contact_update)
     end
-
   end
 
   should "should throw exceptions two parms no mobile_phone" do
     contact = SignalApi::Contact.new('first_name' => 'bill', 'last_name' => 'johnson')
 
-    assert_raise SignalApi::InvalidParameterException do 
+    assert_raise SignalApi::InvalidParameterException do
       contact.send(:validate_contact_update)
     end
-
   end
 
 end

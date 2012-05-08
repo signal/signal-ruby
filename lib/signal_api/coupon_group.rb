@@ -10,23 +10,23 @@ module SignalApi
     #
     # @return a coupon code 
     def self.consume_coupon(coupon_group_tag, mobile_phone)
-      SignalApi.logger.info "Attempting to consume coupon from group #{coupon_group_tag} #{mobile_phone}"
-
       validate_consume_coupon_parameters(coupon_group_tag, mobile_phone)
 
+      SignalApi.logger.info "Attempting to consume coupon from group #{coupon_group_tag} #{mobile_phone}"
+
       xml = Builder::XmlMarkup.new
-      xml.request {
-        xml.user {
+      xml.request do
+        xml.user do
           xml.tag!('mobile_phone',mobile_phone)
-                 }
+        end
         xml.tag!('coupon_group', coupon_group_tag)
-      }
+      end
 
       response = with_retries do
         get('/api/coupon_groups/consume_coupon.xml',
-             :body => xml.target!,
-             :format => :xml,
-             :headers => common_headers)
+            :body => xml.target!,
+            :format => :xml,
+            :headers => common_headers)
       end
 
       if response.code == 200
@@ -37,15 +37,11 @@ module SignalApi
     end
 
     private
+
     def self.validate_consume_coupon_parameters(coupon_group_tag, mobile_phone)
-      if coupon_group_tag.blank?
-        raise InvalidParameterException.new("Coupon group tag cannot be blank")
-      end
-      if mobile_phone.blank?
-        raise InvalidParameterException.new("Mobile_phone cannot be blank")
-      end
+      raise InvalidParameterException.new("Coupon group tag cannot be blank") if coupon_group_tag.blank?
+      raise InvalidParameterException.new("Mobile_phone cannot be blank") if mobile_phone.blank?
     end
 
   end
-
 end

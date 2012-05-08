@@ -16,20 +16,18 @@ module SignalApi
 
     # Lookup a carrier on textme
     #
-    # @param [String] mobile_phone The mobile phone to lookup 
+    # @param [String] mobile_phone The mobile phone to lookup
     #
     # @return [carrier] A Carrier object representing the Carrier on the Signal platform
     def self.lookup(mobile_phone)
-      SignalApi.logger.info "Attempting to lookup carrier for mobile phone #{mobile_phone}"
+      raise InvalidParameterException.new("mobile_phone cannot be blank") if mobile_phone.blank?
 
-      if mobile_phone.blank?
-        raise InvalidParameterException.new("mobile_phone cannot be blank")
-      end
+      SignalApi.logger.info "Attempting to lookup carrier for mobile phone #{mobile_phone}"
 
       response = with_retries do
         get("/app/carriers/lookup/#{mobile_phone}.xml",
-             :format => :xml,
-             :headers => common_headers)
+            :format => :xml,
+            :headers => common_headers)
       end
 
       if response.code == 200 && response.parsed_response['carrier']
@@ -40,5 +38,4 @@ module SignalApi
     end
 
   end
-
 end

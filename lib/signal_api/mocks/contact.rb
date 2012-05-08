@@ -9,6 +9,5 @@ module SignalApi
     def save_additional_info
       { :attributes => @attributes }
     end
-
   end
 end

@@ -24,11 +24,11 @@ END
   end
 
   should "should throw exceptions for missing params" do
-    assert_raise SignalApi::InvalidParameterException do 
+    assert_raise SignalApi::InvalidParameterException do
       SignalApi::CouponGroup.consume_coupon(nil, "3125551212")
     end
 
-    assert_raise SignalApi::InvalidParameterException do 
+    assert_raise SignalApi::InvalidParameterException do
       SignalApi::CouponGroup.consume_coupon("asdfa", nil)
     end
   end
