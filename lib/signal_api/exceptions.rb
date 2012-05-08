@@ -11,6 +11,6 @@ module SignalApi
   # An invalid parameter was passed to the given method
   class InvalidParameterException < StandardError; end
 
-  # An invalid mobile phone number was passed 
+  # An invalid mobile phone number was passed
   class InvalidMobilePhoneException < StandardError; end
 end
