@@ -70,7 +70,7 @@ class ListTest < Test::Unit::TestCase
     @list.create_subscription(SignalApi::SubscriptionType::SMS, SignalApi::Contact.new('mobile-phone' => '3125551212', 'first-name' => 'John'), :source_keyword => 'FOO')
   end
 
-  should "raise an exception if the subscription could not be created" do
+  should "returns false if the subscription could not be created" do
     FakeWeb.register_uri(:post, SignalApi.base_uri + '/api/subscription_campaigns/1/subscriptions.xml', :status => ['422', 'Bad Request'], :body => <<-END)
 <?xml version="1.0" encoding="UTF-8"?>
 <error>
@@ -78,7 +78,18 @@ class ListTest < Test::Unit::TestCase
   <message>You are already signed up to the TEST mobile subscription list. To opt-out, send the text message 'STOP TEST' to 839863.</message>
 </error>
 END
-    assert_raise SignalApi::ApiException do
+    assert_equal false, @list.create_subscription(SignalApi::SubscriptionType::SMS, SignalApi::Contact.new('mobile-phone' => '3125551212', 'first-name' => 'John'), :source_keyword => 'FOO')
+  end
+
+  should "raise an exception if the subscription could not be created due to invalid mobile" do
+    FakeWeb.register_uri(:post, SignalApi.base_uri + '/api/subscription_campaigns/1/subscriptions.xml', :status => ['422', 'Bad Request'], :body => <<-END)
+<?xml version="1.0" encoding="UTF-8"?>
+<error>
+  <request>/api/subscription_campaigns/1/subscriptions.xml</request>
+  <message>Could not find the carrier for mobile phone 3125551212</message>
+</error>
+END
+    assert_raise SignalApi::InvalidMobilePhoneException do
       @list.create_subscription(SignalApi::SubscriptionType::SMS, SignalApi::Contact.new('mobile-phone' => '3125551212', 'first-name' => 'John'), :source_keyword => 'FOO')
     end
   end
@@ -133,7 +144,7 @@ END
     @list.destroy_subscription(SignalApi::SubscriptionType::SMS, SignalApi::Contact.new('mobile-phone' => '3125551212', 'first-name' => 'John'))
   end
 
-  should "raise an exception if the subscription could not be destroyed" do
+  should "return false if the subscription could not be destroyed" do
     FakeWeb.register_uri(:delete, SignalApi.base_uri + '/api/subscription_campaigns/1/3125551212.xml', :status => ['422', 'Bad Request'], :body => <<-END)
 <?xml version="1.0" encoding="UTF-8"?>
 <error>
@@ -141,9 +152,7 @@ END
   <message>3125551212 is not subscribed to campaign ID 1</message>
 </error>
 END
-    assert_raise SignalApi::ApiException do
-      @list.destroy_subscription(SignalApi::SubscriptionType::SMS, SignalApi::Contact.new('mobile-phone' => '3125551212', 'first-name' => 'John'))
-    end
+    assert_equal false, @list.destroy_subscription(SignalApi::SubscriptionType::SMS, SignalApi::Contact.new('mobile-phone' => '3125551212', 'first-name' => 'John'))
   end
 
   #
