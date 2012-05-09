@@ -38,14 +38,14 @@ class ListTest < Test::Unit::TestCase
   end
 
   should "not be able to create a SMS subscription without a mobile phone number" do
-    exception = assert_raise SignalApi::InvalidParameterException do
+    exception = assert_raise SignalApi::InvalidMobilePhoneException do
       @list.create_subscription(SignalApi::SubscriptionType::SMS, SignalApi::Contact.new('first-name' => 'John'))
     end
     assert_equal "A valid mobile phone number required for SMS subscriptions", exception.message
   end
 
   should "not be able to create a SMS subscription with an invalid mobile phone number" do
-    exception = assert_raise SignalApi::InvalidParameterException do
+    exception = assert_raise SignalApi::InvalidMobilePhoneException do
       @list.create_subscription(SignalApi::SubscriptionType::SMS, SignalApi::Contact.new('mobile-phone' => '1234', 'first-name' => 'John'))
     end
     assert_equal "A valid mobile phone number required for SMS subscriptions", exception.message
@@ -134,14 +134,14 @@ END
   end
 
   should "not be able to destroy an SMS subscription without a mobile phone number" do
-    exception = assert_raise SignalApi::InvalidParameterException do
+    exception = assert_raise SignalApi::InvalidMobilePhoneException do
       @list.destroy_subscription(SignalApi::SubscriptionType::SMS, SignalApi::Contact.new('first-name' => 'John'))
     end
     assert_equal "A valid mobile phone number required for SMS subscriptions", exception.message
   end
 
   should "not be able to destroy an SMS subscription with an invalid mobile phone number" do
-    exception = assert_raise SignalApi::InvalidParameterException do
+    exception = assert_raise SignalApi::InvalidMobilePhoneException do
       @list.create_subscription(SignalApi::SubscriptionType::SMS, SignalApi::Contact.new('mobile-phone' => '1234', 'first-name' => 'John'))
     end
     assert_equal "A valid mobile phone number required for SMS subscriptions", exception.message

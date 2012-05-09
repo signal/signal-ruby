@@ -190,7 +190,7 @@ module SignalApi
       end
 
       if subscription_type == SubscriptionType::SMS && !Phone.valid?(contact.mobile_phone)
-        raise InvalidParameterException.new("A valid mobile phone number required for SMS subscriptions")
+        raise InvalidMobilePhoneException.new("A valid mobile phone number required for SMS subscriptions")
       end
 
       if subscription_type == SubscriptionType::EMAIL && !EmailAddress.valid?(contact.email_address)
@@ -208,7 +208,7 @@ module SignalApi
       end
 
       if subscription_type == SubscriptionType::SMS && !Phone.valid?(contact.mobile_phone)
-        raise InvalidParameterException.new("A valid mobile phone number required for SMS subscriptions")
+        raise InvalidMobilePhoneException.new("A valid mobile phone number required for SMS subscriptions")
       end
 
       if subscription_type == SubscriptionType::EMAIL && !EmailAddress.valid?(contact.email_address)
