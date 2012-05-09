@@ -162,12 +162,12 @@ END
   end
 
   should "be able to destroy a subscription" do
-    FakeWeb.register_uri(:delete, SignalApi.base_uri + '/api/subscription_campaigns/1/3125551212.xml', :status => ['200', 'Success'])
+    FakeWeb.register_uri(:delete, SignalApi.base_uri + '/api/subscription_campaigns/1/subscriptions/3125551212.xml', :status => ['200', 'Success'])
     @list.destroy_subscription(SignalApi::SubscriptionType::SMS, SignalApi::Contact.new('mobile-phone' => '3125551212', 'first-name' => 'John'))
   end
 
   should "return false if the subscription could not be destroyed" do
-    FakeWeb.register_uri(:delete, SignalApi.base_uri + '/api/subscription_campaigns/1/3125551212.xml', :status => ['422', 'Bad Request'], :body => <<-END)
+    FakeWeb.register_uri(:delete, SignalApi.base_uri + '/api/subscription_campaigns/1/subscriptions/3125551212.xml', :status => ['422', 'Bad Request'], :body => <<-END)
 <?xml version="1.0" encoding="UTF-8"?>
 <error>
   <request>/api/subscription_campaigns/1/3125551212.xml</request>

@@ -102,7 +102,7 @@ module SignalApi
       end
 
       response = self.class.with_retries do
-        self.class.delete("/api/subscription_campaigns/#{@list_id}/#{contact_id}.xml",
+        self.class.delete("/api/subscription_campaigns/#{@list_id}/subscriptions/#{contact_id}.xml",
                           :headers => self.class.common_headers)
       end
 
@@ -110,7 +110,7 @@ module SignalApi
         return true
       else
         if response.body.include?("is not subscribed to campaign")
-          SignalApi.logger.warn response.body
+          SignalApi.logger.info response.body
           return false
         else
           self.class.handle_api_failure(response)
