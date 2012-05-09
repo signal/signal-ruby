@@ -33,4 +33,11 @@ END
     end
   end
 
+  should "show throw and exception for mobile not found" do
+    FakeWeb.register_uri(:get, SignalApi.base_uri + '/app/carriers/lookup/3125551212.xml', :content_type => 'application/xml', :status => '404')
+    assert_raise SignalApi::InvalidMobilePhoneException do 
+      SignalApi::Carrier.lookup('3125551212')
+    end
+  end
+
 end

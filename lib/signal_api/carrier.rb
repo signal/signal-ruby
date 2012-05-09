@@ -32,6 +32,8 @@ module SignalApi
 
       if response.code == 200 && response.parsed_response['carrier']
         Carrier.new(response.parsed_response['carrier']['id'], response.parsed_response['carrier']['name'])
+      elsif response.code == 404
+        raise InvalidMobilePhoneException.new("carrier for mobile phone #{mobile_phone} could not be found") 
       else
         handle_api_failure(response)
       end
