@@ -112,6 +112,9 @@ module SignalApi
         if response.body.include?("is not subscribed to campaign")
           SignalApi.logger.info response.body
           return false
+        elsif response.body.include?("Invalid user ID")
+          SignalApi.logger.info response.body
+          return false
         else
           self.class.handle_api_failure(response)
         end

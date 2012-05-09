@@ -166,12 +166,23 @@ END
     @list.destroy_subscription(SignalApi::SubscriptionType::SMS, SignalApi::Contact.new('mobile-phone' => '3125551212', 'first-name' => 'John'))
   end
 
-  should "return false if the subscription could not be destroyed" do
+  should "return false if the subscription could not be destroyed because user not subscribed" do
     FakeWeb.register_uri(:delete, SignalApi.base_uri + '/api/subscription_campaigns/1/subscriptions/3125551212.xml', :status => ['422', 'Bad Request'], :body => <<-END)
 <?xml version="1.0" encoding="UTF-8"?>
 <error>
   <request>/api/subscription_campaigns/1/3125551212.xml</request>
   <message>3125551212 is not subscribed to campaign ID 1</message>
+</error>
+END
+    assert_equal false, @list.destroy_subscription(SignalApi::SubscriptionType::SMS, SignalApi::Contact.new('mobile-phone' => '3125551212', 'first-name' => 'John'))
+  end
+
+  should "return false if the subscription could not be destroyed because invalid user" do
+    FakeWeb.register_uri(:delete, SignalApi.base_uri + '/api/subscription_campaigns/1/subscriptions/3125551212.xml', :status => ['422', 'Bad Request'], :body => <<-END)
+<?xml version="1.0" encoding="UTF-8"?>
+<error>
+  <request>/api/subscription_campaigns/1/3125551212.xml</request>
+  <message>Invalid user ID: 3125551212</message>
 </error>
 END
     assert_equal false, @list.destroy_subscription(SignalApi::SubscriptionType::SMS, SignalApi::Contact.new('mobile-phone' => '3125551212', 'first-name' => 'John'))
