@@ -12,6 +12,7 @@ end
 require 'test/unit'
 require 'fakeweb'
 require 'shoulda'
+require 'mocha'
 
 require 'signal_api'
 

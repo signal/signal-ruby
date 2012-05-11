@@ -85,18 +85,18 @@ module SignalApi
 
       SignalApi.logger.info "Attempting to create a segment: name => #{name}, description => \"#{description}\", type = #{segment_type}}"
       SignalApi.logger.debug "Segment data: #{body}"
-      response = with_retries do
-        post("/api/filter_groups/create.xml",
-             :body => body,
-             :format => :xml,
-             :headers => common_headers)
-      end
+      with_retries do
+        response = post("/api/filter_groups/create.xml",
+                        :body => body,
+                        :format => :xml,
+                        :headers => common_headers)
 
-      if response.code == 200
-        data = response.parsed_response['subscription_list_filter_group']
-        new(data['id'], data['name'], data['description'], lookup_segment_type(data['filter_group_type_id']), data['account_id'])
-      else
-        handle_api_failure(response)
+        if response.code == 200
+          data = response.parsed_response['subscription_list_filter_group']
+          new(data['id'], data['name'], data['description'], lookup_segment_type(data['filter_group_type_id']), data['account_id'])
+        else
+          handle_api_failure(response)
+        end
       end
     end
 
@@ -121,30 +121,30 @@ module SignalApi
       end
 
       SignalApi.logger.info "Attempting to add users to segment #{@id}"
-      response = self.class.with_retries do
-        self.class.post("/api/filter_segments/#{@id}/update.xml",
-                        :body => body,
-                        :format => :xml,
-                        :headers => self.class.common_headers)
-      end
+      self.class.with_retries do
+        response = self.class.post("/api/filter_segments/#{@id}/update.xml",
+                                   :body => body,
+                                   :format => :xml,
+                                   :headers => self.class.common_headers)
 
-      if response.code == 200
-        data = response.parsed_response['subscription_list_segment_results']
+        if response.code == 200
+          data = response.parsed_response['subscription_list_segment_results']
 
-        if data['users_not_found'] && data['users_not_found']['user_not_found']
-          if data['users_not_found']['user_not_found'].respond_to?(:join)
-            SignalApi.logger.warn data['users_not_found']['user_not_found'].join(", ")
-          else
-            SignalApi.logger.warn data['users_not_found']['user_not_found']
+          if data['users_not_found'] && data['users_not_found']['user_not_found']
+            if data['users_not_found']['user_not_found'].respond_to?(:join)
+              SignalApi.logger.warn data['users_not_found']['user_not_found'].join(", ")
+            else
+              SignalApi.logger.warn data['users_not_found']['user_not_found']
+            end
           end
-        end
 
-        { :total_users_processed => (data['total_users_processed'] || 0).to_i,
-          :total_users_added     => (data['total_users_added'] || 0).to_i,
-          :total_users_not_found => (data['total_users_not_found'] || 0).to_i,
-          :total_duplicate_users => (data['total_duplicate_users'] || 0).to_i }
-      else
-        self.class.handle_api_failure(response)
+          { :total_users_processed => (data['total_users_processed'] || 0).to_i,
+            :total_users_added     => (data['total_users_added'] || 0).to_i,
+            :total_users_not_found => (data['total_users_not_found'] || 0).to_i,
+            :total_duplicate_users => (data['total_duplicate_users'] || 0).to_i }
+        else
+          self.class.handle_api_failure(response)
+        end
       end
     end
 
@@ -158,5 +158,4 @@ module SignalApi
     end
 
   end
-
 end

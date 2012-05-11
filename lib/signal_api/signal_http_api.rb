@@ -13,6 +13,9 @@ module SignalApi
         retry_counter = 0
         begin
           yield
+        rescue NonRetryableException => e
+          SignalApi.logger.error "Non retryable exception: #{e.message}"
+          raise
         rescue Exception => e
           SignalApi.logger.error "Exception: #{e.message}"
           sleep 1

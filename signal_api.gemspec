@@ -23,4 +23,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency('rake', '~> 0.9.2.2')
   gem.add_development_dependency('yard', '~> 0.7.5')
   gem.add_development_dependency('bluecloth', '~> 2.2.0')
+  gem.add_development_dependency('mocha', '~> 0.10.5')
 end

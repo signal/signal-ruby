@@ -54,29 +54,29 @@ module SignalApi
 
       SignalApi.logger.info "Attempting to create a subscription to list #{@list_id}"
       SignalApi.logger.debug "Subscription data: #{body}"
-      response = self.class.with_retries do
-        self.class.post("/api/subscription_campaigns/#{@list_id}/subscriptions.xml",
-                        :body => body,
-                        :format => :xml,
-                        :headers => self.class.common_headers)
-      end
+      self.class.with_retries do
+        response = self.class.post("/api/subscription_campaigns/#{@list_id}/subscriptions.xml",
+                                   :body => body,
+                                   :format => :xml,
+                                   :headers => self.class.common_headers)
 
-      if response.code == 200
-        return true
-      else
-        if response.body.include?("Could not find the carrier for mobile phone")
-          raise SignalApi::InvalidMobilePhoneException.new(response.body)
-        elsif response.body.include?("already signed up")
-          SignalApi.logger.info response.body
-          return false
-        elsif response.body.include?("Subscriber cannot be re-added since they have unsubscribed within the past")
-          SignalApi.logger.info response.body
-          return false
-        elsif response.body.include?("User already subscribed, resending confirmation message")
-          SignalApi.logger.info response.body
-          return false
+        if response.code == 200
+          return true
         else
-          self.class.handle_api_failure(response)
+          if response.body.include?("Could not find the carrier for mobile phone")
+            raise SignalApi::InvalidMobilePhoneException.new(response.body)
+          elsif response.body.include?("already signed up")
+            SignalApi.logger.info response.body
+            return false
+          elsif response.body.include?("Subscriber cannot be re-added since they have unsubscribed within the past")
+            SignalApi.logger.info response.body
+            return false
+          elsif response.body.include?("User already subscribed, resending confirmation message")
+            SignalApi.logger.info response.body
+            return false
+          else
+            self.class.handle_api_failure(response)
+          end
         end
       end
     end
@@ -101,22 +101,22 @@ module SignalApi
         contact_id = contact.email_address
       end
 
-      response = self.class.with_retries do
-        self.class.delete("/api/subscription_campaigns/#{@list_id}/subscriptions/#{contact_id}.xml",
-                          :headers => self.class.common_headers)
-      end
+      self.class.with_retries do
+        response = self.class.delete("/api/subscription_campaigns/#{@list_id}/subscriptions/#{contact_id}.xml",
+                                     :headers => self.class.common_headers)
 
-      if response.code == 200
-        return true
-      else
-        if response.body.include?("is not subscribed to campaign")
-          SignalApi.logger.info response.body
-          return false
-        elsif response.body.include?("Invalid user ID")
-          SignalApi.logger.info response.body
-          return false
+        if response.code == 200
+          return true
         else
-          self.class.handle_api_failure(response)
+          if response.body.include?("is not subscribed to campaign")
+            SignalApi.logger.info response.body
+            return false
+          elsif response.body.include?("Invalid user ID")
+            SignalApi.logger.info response.body
+            return false
+          else
+            self.class.handle_api_failure(response)
+          end
         end
       end
     end
@@ -166,18 +166,18 @@ module SignalApi
 
       SignalApi.logger.info "Attempting to send a message to list #{@list_id}"
       SignalApi.logger.debug "Message data: #{body}"
-      response = self.class.with_retries do
-        self.class.post("/api/subscription_campaigns/#{@list_id}/send_message.xml",
-                        :body => body,
-                        :format => :xml,
-                        :headers => self.class.common_headers)
-      end
+      self.class.with_retries do
+        response = self.class.post("/api/subscription_campaigns/#{@list_id}/send_message.xml",
+                                   :body => body,
+                                   :format => :xml,
+                                   :headers => self.class.common_headers)
 
-      if response.code == 200
-        data = response.parsed_response['scheduled_message']
-        data['id']
-      else
-        self.class.handle_api_failure(response)
+        if response.code == 200
+          data = response.parsed_response['scheduled_message']
+          data['id']
+        else
+          self.class.handle_api_failure(response)
+        end
       end
     end
 

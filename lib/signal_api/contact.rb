@@ -35,17 +35,17 @@ module SignalApi
 
       contact_identifier = mobile_phone.blank? ? email_address : mobile_phone
 
-      response = with_retries do
-        put("/api/contacts/#{contact_identifier}.xml",
-            :body => xml.target!,
-            :format => :xml,
-            :headers => common_headers)
-      end
+      with_retries do
+        response = put("/api/contacts/#{contact_identifier}.xml",
+                       :body => xml.target!,
+                       :format => :xml,
+                       :headers => common_headers)
 
-      if response.code == 200
-        true
-      else
-        handle_api_failure(response)
+        if response.code == 200
+          true
+        else
+          handle_api_failure(response)
+        end
       end
     end
 

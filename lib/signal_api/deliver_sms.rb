@@ -35,17 +35,17 @@ module SignalApi
       end
 
       SignalApi.logger.info "Delivering the following message to #{sanitized_mobile_phone}: #{message}"
-      response = self.class.with_retries do
-        self.class.post('/messages/send',
-                        :basic_auth => { :username => @username, :password => @password },
-                        :query => { :mobile_phone => sanitized_mobile_phone, :message => message })
-      end
+      self.class.with_retries do
+        response = self.class.post('/messages/send',
+                                   :basic_auth => { :username => @username, :password => @password },
+                                   :query => { :mobile_phone => sanitized_mobile_phone, :message => message })
 
-      if response.code == 200
-        response.parsed_response =~ /^Message ID: (.*)$/
-        $1 
-      else
-        self.class.handle_api_failure(response)
+        if response.code == 200
+          response.parsed_response =~ /^Message ID: (.*)$/
+          $1
+        else
+          self.class.handle_api_failure(response)
+        end
       end
     end
   end

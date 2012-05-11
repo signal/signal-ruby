@@ -116,6 +116,25 @@ END
     end
   end
 
+  should "not retry the request if it failed because the mobile phone is invalid" do
+    begin
+      SignalApi.retries = 3
+      response = stub(:code => 422, :body => <<-END)
+<?xml version="1.0" encoding="UTF-8"?>
+<error>
+  <request>/api/subscription_campaigns/1/subscriptions.xml</request>
+  <message>Could not find the carrier for mobile phone 3125551212</message>
+</error>
+END
+      SignalApi::List.expects(:post).returns(response).once
+      assert_raise SignalApi::InvalidMobilePhoneException do
+        @list.create_subscription(SignalApi::SubscriptionType::SMS, SignalApi::Contact.new('mobile-phone' => '3125551212', 'first-name' => 'John'), :source_keyword => 'FOO')
+      end
+    ensure
+      SignalApi.retries = 0
+    end
+  end
+
   #
   # destroy_subscription
   #

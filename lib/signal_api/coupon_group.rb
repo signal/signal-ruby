@@ -22,17 +22,17 @@ module SignalApi
         xml.tag!('coupon_group', coupon_group_tag)
       end
 
-      response = with_retries do
-        get('/api/coupon_groups/consume_coupon.xml',
-            :body => xml.target!,
-            :format => :xml,
-            :headers => common_headers)
-      end
+      with_retries do
+        response = get('/api/coupon_groups/consume_coupon.xml',
+                       :body => xml.target!,
+                       :format => :xml,
+                       :headers => common_headers)
 
-      if response.code == 200
-        response.parsed_response['coupon_code']
-      else
-        handle_api_failure(response)
+        if response.code == 200
+          response.parsed_response['coupon_code']
+        else
+          handle_api_failure(response)
+        end
       end
     end
 

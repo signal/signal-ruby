@@ -24,18 +24,18 @@ module SignalApi
 
       SignalApi.logger.info "Attempting to lookup carrier for mobile phone #{mobile_phone}"
 
-      response = with_retries do
-        get("/app/carriers/lookup/#{mobile_phone}.xml",
-            :format => :xml,
-            :headers => common_headers)
-      end
+      with_retries do
+        response = get("/app/carriers/lookup/#{mobile_phone}.xml",
+                       :format => :xml,
+                       :headers => common_headers)
 
-      if response.code == 200 && response.parsed_response['carrier']
-        Carrier.new(response.parsed_response['carrier']['id'], response.parsed_response['carrier']['name'])
-      elsif response.code == 404
-        raise InvalidMobilePhoneException.new("carrier for mobile phone #{mobile_phone} could not be found") 
-      else
-        handle_api_failure(response)
+        if response.code == 200 && response.parsed_response['carrier']
+          Carrier.new(response.parsed_response['carrier']['id'], response.parsed_response['carrier']['name'])
+        elsif response.code == 404
+          raise InvalidMobilePhoneException.new("carrier for mobile phone #{mobile_phone} could not be found") 
+        else
+          handle_api_failure(response)
+        end
       end
     end
 

@@ -1,4 +1,7 @@
 module SignalApi
+  # Base class for exceptions that should not be retried
+  class NonRetryableException < StandardError; end
+
   # Exception raised when a request to the Signal API fails
   class ApiException < StandardError; end
 
@@ -12,5 +15,5 @@ module SignalApi
   class InvalidParameterException < StandardError; end
 
   # An invalid mobile phone number was passed
-  class InvalidMobilePhoneException < StandardError; end
+  class InvalidMobilePhoneException < NonRetryableException; end
 end
