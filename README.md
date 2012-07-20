@@ -2,6 +2,8 @@
 
 Ruby implementation of the Signal API. API details can be found at [http://dev.signalhq.com](http://dev.signalhq.com)
 
+[![Build Status](https://secure.travis-ci.org/signal/signal-ruby.png?branch=master)](http://travis-ci.org/signal/signal-ruby)
+
 ## Installation
 
 Add this line to your application's Gemfile:
