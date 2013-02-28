@@ -4,7 +4,7 @@ A simple library for working with the Signal API (see [http://dev.signalhq.com](
 
 [![Build Status](https://secure.travis-ci.org/signal/signal-ruby.png?branch=master)](http://travis-ci.org/signal/signal-ruby)
 
-## Installation
+Installation
 ------------
 
 ### RubyGems ###
@@ -26,7 +26,7 @@ and then run
 
     bundle install
 
-## Usage
+Usage
 ------------
 
 Before using, you'll need to set your API key (available within your user account via http://app.signalhq.com):
