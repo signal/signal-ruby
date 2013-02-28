@@ -16,7 +16,7 @@ Gem::Specification.new do |gem|
   gem.version       = SignalApi::VERSION
 
   gem.add_dependency('httparty', '~> 0.8.1')
-  gem.add_dependency('builder', '~> 3.0.0')
+  gem.add_dependency('builder', '~> 2.0.0')
 
   gem.add_development_dependency('fakeweb', '~> 1.3.0')
   gem.add_development_dependency('shoulda', '~> 3.0.1')
