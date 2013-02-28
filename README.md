@@ -1,35 +1,44 @@
-# SignalApi
+# Signal
 
-Ruby implementation of the Signal API. API details can be found at [http://dev.signalhq.com](http://dev.signalhq.com)
+A simple library for working with the Signal API (see [http://dev.signalhq.com](http://dev.signalhq.com))
 
 [![Build Status](https://secure.travis-ci.org/signal/signal-ruby.png?branch=master)](http://travis-ci.org/signal/signal-ruby)
 
 ## Installation
+------------
 
-Add this line to your application's Gemfile:
+### RubyGems ###
+Signal can be installed using RubyGems
 
-    gem 'signal_api'
+    gem install signal_api
 
-And then execute:
+Inside your script, be sure to
 
-    $ bundle
+    require "rubygems"
+    require "signal_api"
 
-Or install it yourself as:
+### Bundler ###
+If you're using Bundler, add the following to your Gemfile
 
-    $ gem install signal_api
+    gem "signal_api"
+
+and then run
+
+    bundle install
 
 ## Usage
+------------
 
-Before using any of the APIs, you will need to set your API key:
+Before using, you'll need to set your API key (available within your user account via http://app.signalhq.com):
 
     SignalApi.api_key = 'foobar123456abcxyz77'
 
-You may also specify where SignalApi should log messages (optional):
+You may also specify where Signal should log messages (optional):
 
     SignalApi.logger = Rails.logger
     SignalApi.logger = Logger.new(STDERR)
 
-After SignalApi has been configured, you may use any of the API classes to interact with the Signal platform.
+After Signal has been configured, you may use any of the API classes to interact with the Signal platform.
 
 ## Contributing
 
